@@ -1,0 +1,32 @@
+{%extends 'Bootstrap/base.html'%}
+{%import 'bootstrap/wtf.html' as wtf%}
+
+{%block content%}
+{%include "header.html"%}
+
+<div class="container col-lg-12 center color">
+    <div class="row">
+          <!-- This is where the form will go -->
+    <div class="center-form col-lg-4 form-font">
+        <h1 class="post-title"> Stroke Prediction </h1>
+
+        <br>
+        <hr>
+        <br>
+        {{wtf.quick_form(form)}}
+
+
+</div>
+        <div class="col-lg-4"  style="margin-top: 50px">
+            <h3 class="home-h3"><strong>This is not intended to be used for real-world medical diagnosis.</strong></h3>
+            <hr>
+        <h3 class="home-h3">Using Decision Tree Classifier by Sci-Kit Learn and training the data with Kaggle datasets,
+            the probability of having stroke is predicted according to the user input.
+            Although the classifier has high accuracy (>90%), it has a low f1 score. This imbalance
+            means that there is a high accuracy for predicting negative results but very low accuracy for
+            predicting a correct positive result.</h3>
+        </div>
+    </div>
+  </div>
+
+{%endblock%}

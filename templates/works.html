@@ -1,0 +1,33 @@
+{%extends "bootstrap/base.html"%}
+{%import "bootstrap/wtf.html" as wtf%}
+{%block content%}
+{%include "header.html"%}
+
+
+                <!-- Content Row-->
+<section class="container px-4 px-lg-5">
+                <h1 class = "header-text">Projects</h1>
+                <div class="row gx-4 gx-lg-5">
+                    {%for post in all_posts:%}
+                <div class="col-md-4 mb-5">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <img class = "card-img" src = "{{post.img_url}}">
+                            <h2 class="card-title">{{post.title}}</h2>
+                            <p class="card-text">{{post.subtitle}}</p>
+                        </div>
+                        <div class="card-footer"><a class="btn btn-primary btn-sm" href="{{url_for(post.post_url)}}">Read More</a></div>
+                        {%if current_user.is_authenticated:%}
+                        <div class="card-footer"><a class="btn btn-danger btn-sm" href="{{url_for('delete_post',post_id = post.id)}}">DELETE</a></div>
+                        <div class="card-footer"><a class="btn btn-success btn-sm" href="{{url_for('edit_post', post_id= post.id)}}">EDIT</a></div>
+                        {%endif%}
+                    </div>
+                </div>
+                    {%endfor%}
+
+            </div>
+</section>
+</div>
+
+{%include "footer.html"%}
+{%endblock%}

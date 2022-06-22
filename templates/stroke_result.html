@@ -1,0 +1,24 @@
+{%extends 'Bootstrap/base.html'%}
+{%block content%}
+{%include "header.html"%}
+
+<div class="container col-lg-12 center color">
+    <div class="row">
+          <!-- This is where the form will go -->
+    <div class="center-form col-lg-4 form-font">
+        <h1 class="post-title"> Stroke Prediction </h1>
+
+        <br>
+        <hr>
+        <br>
+    {%if prediction == 1%}:
+        <h1 style="color: red; font-weight:500; font-size:4rem">Result: <strong>High</strong> chance of having a stroke<h1>
+        {%else%}
+            <h1 style="color: green; font-weight:500; font-size:4rem">Result: <strong>Low</strong> chance of having a stroke<h1>
+        {%endif%}
+<h1>
+</div>
+    </div>
+  </div>
+
+{%endblock%}

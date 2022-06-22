@@ -1,0 +1,100 @@
+{%extends "bootstrap/base.html"%}
+{%block content%}
+{%include "header.html"%}
+
+<div id="page-container">
+        <div class="container px-4 px-lg-5" id="content-wrap">
+            <!-- Heading Row-->
+            <div class="row gx-4 gx-lg-5 align-items-center my-5">
+                <div class="col-lg-8">
+                    <h1 class="home-header">Hi, I'm <br> NIKKO DOTE</h1>
+                    <h2 class="home-header-h2">Software Developer // Medical Scientist</h2>
+                    <p> <h3 class="home-h3">Software development, machine learning and advanced data analytics, biomedical science and healthcare</h3></p>
+                </div>
+            </div>
+
+            <hr>
+
+             <!-- About Me-->
+            <section id="about-me" class="section-block">
+                <div class = "container">
+                    <div class="col-lg"> <h3 class="header-text">About Me</h3></div>
+                    <div class ="row">
+                        <div class="col-lg-1 col-md-6"><img class="prof-pic rounded mb-4 mb-lg-0" src="{{url_for('static', filename='assets/web_prof-pic.jpg')}}" alt="Profile Picture" /></div>
+                        <div class="col-sm-9 col-md-4 col-lg-5 content-body"><h3 class="home-h3">A medical scientist who happened to be a python developer and tech enthusiast.
+                        Keen to drive innovations in healthcare and business with the latest machine learning and data analytics technology.
+                        Bearing an unconventional yet profound perspective about the digital world, I'm happy to ride along with the world's
+                        fourth industrial revolution, AI. So come join me in my journey!</h3></div>
+
+                    </div>
+                </div> </section>
+<hr>
+            <section id="technologies" class="section-block">
+                <div class="container">
+                    <div class="row">
+                        <h1 class="header-text">Technologies</h1>
+                        <div class="col-lg-4">
+                            <h2>Programming Languages</h2>
+                            <ul>
+                                <li>Python</li>
+                                <li>Bash</li>
+                                <li>SQL, ORM</li>
+                                <li>Excel</li>
+                                <li>Visual Basic for Applications (VBA)</li>
+                                <li>HTML,CSS + Bootstrap</li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <h2>Python Modules</h2>
+                            <ul>
+                                <ul>Data Analytics and Machine Learning:</ul>
+                                <li> Numpy, Pandas, Matplotlib, Seaborn, Sci-kit Learn, XGBoost, Imblearn, </li>
+                                <ul>Web Development and Network Programming (ReST API)</ul>
+                                <li>Flask, Werkzeug, wtforms, socket</li>
+                                <ul>Database</ul>
+                                <li>sqlite3, sqlalchemy</li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <h2>Tools and Platforms</h2>
+                            <ul>
+                                <li>Git</li>
+                                <li>Heroku</li>
+                                <li>Pycharm, vim, nano</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <hr>
+
+                <!-- Content Row-->
+                <section id="projects" class ="section-block">
+                <h1 class = "header-text">Projects</h1>
+                <div class="row gx-4 gx-lg-5">
+
+                    {%for post in all_posts:%}
+                <div class="col-md-4 mb-5">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <img class = "card-img" src = "{{post.img_url}}">
+                            <h2 class="card-title">{{post.title}}</h2>
+                            <p class="card-text">{{post.subtitle}}</p>
+                        </div>
+                        <div class="card-footer"><a class="btn btn-primary btn-sm" href="{{url_for(post.post_url)}}">Read More</a></div>
+                        {%if current_user.is_authenticated:%}
+                        <div class="card-footer"><a class="btn btn-danger btn-sm" href="{{url_for('delete_post',post_id = post.id)}}">DELETE</a></div>
+                        <div class="card-footer"><a class="btn btn-success btn-sm" href="{{url_for('edit_post', post_id= post.id)}}">EDIT</a></div>
+                        {%endif%}
+                    </div>
+                </div>
+                    {%endfor%}
+
+            </div>
+</section>
+</div>
+    {%include "footer.html"%}
+</div>
+    {%endblock%}
