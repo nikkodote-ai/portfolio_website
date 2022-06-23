@@ -14,12 +14,13 @@ import numpy as np
 import model_stroke
 from datetime import datetime
 import logging
+import psycopg2
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 Bootstrap(app)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///portfolio.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL_UPDATED', 'sqlite:///portfolio.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -247,4 +248,4 @@ def logout():
     return redirect(url_for('home'))
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
