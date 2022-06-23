@@ -6,6 +6,7 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from flask_migrate import Migrate
+from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 import pickle
@@ -19,9 +20,12 @@ import psycopg2
 
 app = Flask(__name__, template_folder='templates')
 Bootstrap(app)
+csrf = CSRFProtect(app)
+
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL_UPDATED', 'sqlite:///portfolio.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+csrf.init_app(app)
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
