@@ -1,4 +1,5 @@
 import os
+import sys
 from flask import Flask, render_template, request, url_for, redirect, flash, abort
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from flask_bootstrap import Bootstrap
@@ -12,20 +13,21 @@ from forms import StrokeForm, CreateForm, RegisterForm, LoginForm
 import numpy as np
 import model_stroke
 from datetime import datetime
-from logging import FileHandler, WARNING
+import logging
 
 
 app = Flask(__name__)
 Bootstrap(app)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///portfolio.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///portfolio.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-file_handler = FileHandler('errorlog.txt')
-file_handler.setLevel(WARNING)
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
+
 
 class Posts(db.Model):
     __tablename__ = 'posts'
