@@ -12,6 +12,7 @@ from forms import StrokeForm, CreateForm, RegisterForm, LoginForm
 import numpy as np
 import model_stroke
 from datetime import datetime
+from logging import FileHandler, WARNING
 
 
 app = Flask(__name__)
@@ -22,6 +23,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+file_handler = FileHandler('errorlog.txt')
+file_handler.setLevel(WARNING)
 
 class Posts(db.Model):
     __tablename__ = 'posts'
