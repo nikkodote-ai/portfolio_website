@@ -4,7 +4,7 @@ import pickle
 from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
 
-import model_stroke
+from apps import model_stroke
 import numpy as np
 from forms import CreateForm
 
@@ -13,7 +13,7 @@ Bootstrap(app)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 # load model
-model = pickle.load(open('../Stroke_Prediction-Web_Deployment/model.pkl', 'rb'))
+model = pickle.load(open('/apps/model_stroke.pkl', 'rb'))
 
 
 @app.route("/", methods=['GET', 'POST'])

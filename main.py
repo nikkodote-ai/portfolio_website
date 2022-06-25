@@ -4,7 +4,6 @@ from flask import Flask, render_template, request, url_for, redirect, flash, abo
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -12,11 +11,9 @@ from functools import wraps
 import pickle
 from forms import StrokeForm, CreateForm, RegisterForm, LoginForm
 import numpy as np
-import model_stroke
+from apps import model_stroke
 from datetime import datetime
 import logging
-import psycopg2
-
 
 app = Flask(__name__, template_folder='templates')
 Bootstrap(app)
@@ -164,7 +161,7 @@ def posts(id):
 def stroke_app():
     # contain the following codes in if "model_name" statement
     model_stroke.make_pkl()
-    model = pickle.load(open('model_stroke.pkl', 'rb'))
+    model = pickle.load(open('apps/model_stroke.pkl', 'rb'))
     form = StrokeForm()
     if request.method == "POST":
         #onehot code some of the answers because that is what the model requires
@@ -188,7 +185,7 @@ def stroke_app():
             smoking_status_onehot['unknown'], smoking_status_onehot['formerly_smoked'],
             smoking_status_onehot['never_smoked'], smoking_status_onehot['smokes']]]
         form_answers_np = np.array(form_answers)
-        prediction = model.predict(form_answers)
+        prediction = model.predict(form_answers_np)
 
         return render_template("stroke_result.html", form=form, prediction=prediction)
 
