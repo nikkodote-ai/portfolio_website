@@ -9,11 +9,12 @@ from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 import pickle
-from forms import StrokeForm, CreateForm, RegisterForm, LoginForm
+from forms import StrokeForm, CreateForm, RegisterForm, LoginForm, MorseCodeForm
 import numpy as np
 from apps.strokeapp import model_stroke
 from datetime import datetime
 import logging
+from apps.morsecode import morse_app
 
 app = Flask(__name__, template_folder='templates')
 Bootstrap(app)
@@ -157,6 +158,16 @@ def posts(id):
     return render_template("blog_post.html")
 
 #-----ML APPS hosted in the site----#
+
+@app.route('/apps/morse_code', methods = ['POST', 'GET'])
+def morse_code():
+    output = ""
+    form = MorseCodeForm()
+    if form.validate_on_submit():
+        output = morse_app.translate(form.raw_input.data.strip())
+    return render_template("morse_code.html", form = form, output = output)
+
+
 @app.route('/apps/stroke_prediction', methods = ['POST', 'GET'])
 def stroke_app():
     # contain the following codes in if "model_name" statement
@@ -168,9 +179,11 @@ def stroke_app():
         gender_onehot = {choice[0]:0 for choice in form.gender.choices}
         gender_onehot[form.gender.data] = 1
         print(gender_onehot)
+
         worktype_onehot = {choice[0]:0 for choice in form.work_type.choices}
         worktype_onehot[form.work_type.data] = 1
         print(worktype_onehot)
+
         smoking_status_onehot = {choice[0]:0 for choice in form.smoking_status.choices}
         smoking_status_onehot[form.smoking_status.data] = 1
         print(smoking_status_onehot)
@@ -186,9 +199,7 @@ def stroke_app():
             smoking_status_onehot['never_smoked'], smoking_status_onehot['smokes']]]
         form_answers_np = np.array(form_answers)
         prediction = model.predict(form_answers_np)
-
         return render_template("stroke_result.html", form=form, prediction=prediction)
-
     return render_template("stroke_post.html", form = form)
 
 

@@ -11343,6 +11343,12 @@ margin: 20px auto 20px auto;
 background-color: white;
 }
 
+.textbox{
+width: fit-content;
+block-size: fit-content;
+font-family: 'Libre Baskerville', serif;
+}
+
 @media all and (max-width: 675px) {
 
 a.alignleft {

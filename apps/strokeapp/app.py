@@ -10,7 +10,7 @@ from forms import CreateForm
 app = Flask(__name__)
 Bootstrap(app)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-
+app.config['CKEDITOR_HEIGHT'] = 500
 # load model
 model = pickle.load(open('/apps/strokeapp/model_stroke.pkl', 'rb'))
 

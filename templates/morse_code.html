@@ -1,0 +1,36 @@
+{%extends 'bootstrap/base.html'%}
+{%import 'bootstrap/wtf.html' as wtf%}
+
+{%block content%}
+{%include "header.html"%}
+
+<div class="container col-lg-12 center color">
+    <div class="row">
+          <!-- This is where the form will go -->
+    <div class="center-form col-lg-4 form-font">
+        <h1 class="post-title"> Morse Code Translator </h1>
+
+        <br>
+        <hr>
+        <br>
+        {{wtf.quick_form(form)}}
+        <br>
+        <hr>
+        <br>
+        <h1 class="post-title"> Output</h1>
+        <div class="textbox">
+        <output>{{output}}</output>
+    </div>
+</div>
+        <div class = "col-lg-4">
+            <br>
+            <br>
+        <h3 class="home-h3">Author: Nikko Dote
+            This app translates an input to Morse Code and vice versa.
+            It's setup to predict if the input alphanumeric or in morse and will translate accordingly.
+            The ambitious goal would be to translate sounds to words or vice versa.</h3>
+        </div>
+    </div>
+  </div>
+
+{%endblock%}
