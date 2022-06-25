@@ -4,7 +4,6 @@ import pickle
 from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
 
-from apps import model_stroke
 import numpy as np
 from forms import CreateForm
 
@@ -13,7 +12,7 @@ Bootstrap(app)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 # load model
-model = pickle.load(open('/apps/model_stroke.pkl', 'rb'))
+model = pickle.load(open('/apps/strokeapp/model_stroke.pkl', 'rb'))
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -41,7 +40,7 @@ def home():
             smoking_status_onehot['unknown'], smoking_status_onehot['formerly_smoked'],
             smoking_status_onehot['never_smoked'], smoking_status_onehot['smokes']]]
         form_answers_np = np.array(form_answers)
-        prediction = model.predict(form_answers)
+        prediction = model.predict(form_answers_np)
 
         return render_template("predict.html", form=form, prediction=prediction)
 
@@ -49,4 +48,4 @@ def home():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()

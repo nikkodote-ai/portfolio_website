@@ -4,14 +4,11 @@ import pickle
 #model
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
-
-#for feature selection using feature wrapper
-from sklearn.feature_selection import SequentialFeatureSelector as SFS
-#Module to compensate for class imbalance using Oversampling
 from imblearn.over_sampling import RandomOverSampler
 
 #Data from Kaggle
-df = pd.read_csv("apps/healthcare-dataset-stroke-data.csv")
+df = pd.read_csv("apps/strokeapp/healthcare-dataset-stroke-data.csv")
+
 #Preprocessing
 columns_to_onehot = ['gender', 'work_type', 'smoking_status']
 
@@ -30,8 +27,6 @@ def preprocessing(df, target):
 
     # fill null values with median value; another option is imputation by KNNImputer
     df.fillna(df.median(), inplace=True)
-
-    #set ID as index
 
     # replace to values to binary
     ##convert ever_married values to boolean so it's machine-interpretable
@@ -66,7 +61,7 @@ def predict(form_answers : list):
     return clf.predict(form_answers)
 
 def make_pkl():
-    pickle.dump(clf, open('apps/model_stroke.pkl', 'wb'))
+    pickle.dump(clf, open('apps/strokeapp/model_stroke.pkl', 'wb'))
 
 X_train_oversampled, X_test_oversampled, y_train_oversampled, y_test_oversampled = preprocessing(df, 'stroke')
 

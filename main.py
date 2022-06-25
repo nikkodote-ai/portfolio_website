@@ -11,7 +11,7 @@ from functools import wraps
 import pickle
 from forms import StrokeForm, CreateForm, RegisterForm, LoginForm
 import numpy as np
-from apps import model_stroke
+from apps.strokeapp import model_stroke
 from datetime import datetime
 import logging
 
@@ -161,7 +161,7 @@ def posts(id):
 def stroke_app():
     # contain the following codes in if "model_name" statement
     model_stroke.make_pkl()
-    model = pickle.load(open('apps/model_stroke.pkl', 'rb'))
+    model = pickle.load(open('apps/strokeapp/model_stroke.pkl', 'rb'))
     form = StrokeForm()
     if request.method == "POST":
         #onehot code some of the answers because that is what the model requires
