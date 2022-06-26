@@ -114,7 +114,7 @@ def long_audio_download(output_uri):
     except ClientError as e:
         print("Processing. Download once done")
         time.sleep(20)
-        s3.download_file(bucket_name, object_name, f'{output_uri}.mp3')
+        s3.download_file(bucket_name, object_name, os.path.join("C:\\Users\\nikko\\Downloads\\", f'{output_uri}.mp3'))
     else:
         raise
 
