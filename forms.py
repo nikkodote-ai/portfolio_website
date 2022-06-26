@@ -30,6 +30,11 @@ class MorseCodeForm(FlaskForm):
     raw_input = CKEditorField("Input", validators=[DataRequired()], render_kw={"style":"color:black;font-size:1.5rem;font-family: 'Libre Baskerville', serif;"})
     submit = SubmitField("Translate!", render_kw={"style":"font-size:2rem; font-weight:600; color: coral; width:100%; text-align:center;"})
 
+class ConverterForm(FlaskForm):
+    raw_input = CKEditorField("Input", validators=[DataRequired()], render_kw={"style":"color:black;font-size:1.5rem;font-family: 'Libre Baskerville', serif;"})
+    submit = SubmitField("Convert!", render_kw={"style":"font-size:2rem; font-weight:600; color: goldenrod; width:100%; text-align:center;"})
+
+
 class StrokeForm(FlaskForm):
     age = IntegerField("Age", validators=[DataRequired()])
     hypertension = BooleanField("History of Hypertension", )

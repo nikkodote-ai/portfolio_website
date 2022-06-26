@@ -9,12 +9,13 @@ from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 import pickle
-from forms import StrokeForm, CreateForm, RegisterForm, LoginForm, MorseCodeForm
+from forms import StrokeForm, CreateForm, RegisterForm, LoginForm, MorseCodeForm, ConverterForm
 import numpy as np
 from apps.strokeapp import model_stroke
 from datetime import datetime
 import logging
 from apps.morsecode import morse_app
+
 
 app = Flask(__name__, template_folder='templates')
 Bootstrap(app)
@@ -167,6 +168,12 @@ def morse_code():
         output = morse_app.translate(form.raw_input.data.strip())
     return render_template("morse_code.html", form = form, output = output)
 
+@app.route('/apps/text-audio_converter', methods = ['POST', 'GET'])
+def text_audio_converter():
+    form = ConverterForm()
+    if form.validate_on_submit():
+        pass
+    return render_template("text-audio_converter.html", form = form)
 
 @app.route('/apps/stroke_prediction', methods = ['POST', 'GET'])
 def stroke_app():
