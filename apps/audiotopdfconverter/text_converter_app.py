@@ -106,15 +106,14 @@ def long_audio_download(output_uri):
     output_uri = output_uri.split('/')
     bucket_name = output_uri[-2]
     object_name = output_uri[-1]
-    s3 = client('s3', region_name="ap-southeast-2", aws_access_key_id=AWSAccessKeyId,
-                aws_secret_access_key=AWSSecretKey)
+    s3 = client('s3', region_name="ap-southeast-2", aws_access_key_id=AWSAccessKeyId, aws_secret_access_key=AWSSecretKey)
     print(bucket_name + "\n" + object_name)
     try:
-        s3.download_file(bucket_name, object_name, os.path.join("C:\\Users\\nikko\\Downloads\\", f'{output_uri}.mp3'))
+        s3.download_file(bucket_name, object_name, os.path.join("C:\\Users\\nikko\\Downloads\\", object_name))
     except ClientError as e:
         print("Processing. Download once done")
         time.sleep(20)
-        s3.download_file(bucket_name, object_name, os.path.join("C:\\Users\\nikko\\Downloads\\", f'{output_uri}.mp3'))
+        s3.download_file(bucket_name, object_name, os.path.join("C:\\Users\\nikko\\Downloads\\", object_name))
     else:
         raise
 
