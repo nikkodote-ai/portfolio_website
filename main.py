@@ -31,7 +31,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #for uploading files
 dir_path = os.path.dirname(os.path.realpath(__file__))
-app.config.update(UPLOAD_FILES_DEST = os.path.join(dir_path, "static\\uploaded_files\\"))
+app.config.update(UPLOAD_FILES_DEST = os.path.join(dir_path, "/tmp"))
 csrf.init_app(app)
 
 db = SQLAlchemy(app)
