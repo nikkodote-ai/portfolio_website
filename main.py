@@ -178,6 +178,7 @@ def text_audio_converter():
         generated_filename = secrets.token_hex(15)
         file_location_pptx = os.path.join(app.config['UPLOAD_FILES_DEST'], generated_filename + f".{extension}")
         file_location_mp3 = os.path.join(app.config['UPLOAD_FILES_DEST'], generated_filename)
+        f.save(file_location_pptx)
         #convert and download
         text_to_convert = tca.convert_ppt_to_text(file_location_pptx)
         tca.convert_to_audio(text_to_convert, form.voice.data, form.engine.data, file_location_mp3)
