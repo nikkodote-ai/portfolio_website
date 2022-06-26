@@ -113,7 +113,7 @@ def long_audio_download(output_uri):
         s3.download_file(bucket_name, object_name, f'{output_uri}.mp3')
     except ClientError as e:
         print("Processing. Download once done")
-        time.sleep(30)
+        time.sleep(20)
         s3.download_file(bucket_name, object_name, f'{output_uri}.mp3')
     else:
         raise

@@ -30,7 +30,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL_UPDATED', 'sqlit
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #for uploading files
-dir_path = os.path.dirname(os.path.realpath(__file__))
+# dir_path = os.path.dirname(os.path.realpath(__file__))
+#important to use "UPLOAD_FOLDER" as epr flask docs, dont make up
 app.config.update(UPLOAD_FOLDER ="/tmp/")
 # app.config.update(UPLOAD_FOLDER = "C:\\Users\\nikko\\PycharmProjects\\Professional_Portfolio\\Portfolio_Website\\static\\uploaded_files")
 csrf.init_app(app)
