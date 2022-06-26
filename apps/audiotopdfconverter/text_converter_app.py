@@ -7,6 +7,7 @@ import sys
 from pptx import Presentation
 import re
 import time
+import wget
 
 
 # from https://docs.aws.amazon.com/polly/latest/dg/get-started-what-next.html
@@ -56,7 +57,7 @@ def convert_ppt_to_text(file_name):
     #     output.write(final_text)
     return final_text
 
-def convert_to_audio(text_input, voice_id, engine):
+def convert_to_audio(text_input, voice_id, engine, file_name):
     # Create a client using the credentials and region defined in the [adminuser]
     # section of the AWS credentials file (~/.aws/credentials).
     session = Session(aws_access_key_id= AWSAccessKeyId, aws_secret_access_key=AWSSecretKey, region_name = 'ap-southeast-2' )
@@ -80,12 +81,13 @@ def convert_to_audio(text_input, voice_id, engine):
     # Characters less than 3000 can be converted using synthesize_speech and can be saved in the local disk right away
     if "AudioStream" in response:
             with closing(response["AudioStream"]) as stream:
-               output = "short_speech_conversion.mp3"
+               output = f"{file_name}.mp3"
 
                try:
                 # Open a file for writing the output as a binary stream
-                    with open(output, "wb") as file:
-                       file.write(stream.read())
+                #     with open(output, "wb") as file:
+                #        file.write(stream.read())
+                    response = wget(output)
 
                except IOError as error:
                   # Could not write to file, exit gracefully
@@ -116,3 +118,4 @@ def long_audio_download(output_uri):
         s3.download_file(bucket_name, object_name, 'long_speech_conversion.mp3')
     else:
         raise
+

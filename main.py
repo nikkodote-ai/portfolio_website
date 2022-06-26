@@ -13,13 +13,13 @@ from functools import wraps
 import pickle
 from forms import StrokeForm, CreateForm, RegisterForm, LoginForm, MorseCodeForm, TTSForm
 import numpy as np
-from apps.strokeapp import model_stroke
 from datetime import datetime
 import logging
 from apps.morsecode import morse_app
 import secrets
-from apps.audiotopdfconverter import text_converter_app as tca
 
+from apps.strokeapp import model_stroke
+from apps.audiotopdfconverter import text_converter_app as tca
 
 app = Flask(__name__, template_folder='templates')
 Bootstrap(app)
@@ -174,13 +174,14 @@ def text_audio_converter():
     if form.validate_on_submit():
         f = form.ppt_file.data
         file_name, extension = secure_filename(form.ppt_file.data.filename).split('.')
-        generated_filename = secrets.token_hex(15) + f".{extension}"
-        file_location = os.path.join(app.config['UPLOAD_FILES_DEST'], generated_filename)
+        generated_filename = secrets.token_hex(15)
+        file_location_pptx = os.path.join(app.config['UPLOAD_FILES_DEST'], generated_filename + f".{extension}")
+        file_location_mp3 = os.path.join(app.config['UPLOAD_FILES_DEST'], generated_filename)
         #save the file in the cloud temporarily
-        f.save(file_location)
+        f.save(file_location_pptx)
         #convert and download
-        text_to_convert = tca.convert_ppt_to_text(file_location)
-        tca.convert_to_audio(text_to_convert, form.voice.data, form.engine.data)
+        text_to_convert = tca.convert_ppt_to_text(file_location_pptx)
+        tca.convert_to_audio(text_to_convert, form.voice.data, form.engine.data, file_location_mp3)
         return render_template("tts_success.html")
     return render_template("text-audio_converter.html", form = form)
 
