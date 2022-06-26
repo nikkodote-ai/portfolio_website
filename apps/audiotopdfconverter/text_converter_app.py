@@ -87,7 +87,7 @@ def convert_to_audio(text_input, voice_id, engine, file_name):
                 # Open a file for writing the output as a binary stream
                 #     with open(output, "wb") as file:
                 #        file.write(stream.read())
-                    response = wget(output)
+                    response = wget.download(output)
 
                except IOError as error:
                   # Could not write to file, exit gracefully
