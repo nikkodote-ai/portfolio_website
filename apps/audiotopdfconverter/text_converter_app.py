@@ -9,7 +9,6 @@ import re
 import time
 
 
-
 # from https://docs.aws.amazon.com/polly/latest/dg/get-started-what-next.html
 AWSAccessKeyId=os.getenv('AWSAccessKeyId')
 AWSSecretKey=os.getenv('AWSSecretKey')
@@ -53,8 +52,8 @@ def convert_ppt_to_text(file_name):
         final_text += f'<break strength ="medium"/> Slide {slide_index}, {" ".join(texts)}'
 
     final_text = '<speak><prosody rate="85%">' + final_text + '</prosody></speak>'
-    with open("ppt_extracted_text.txt", "w") as output:
-        output.write(final_text)
+    # with open("ppt_extracted_text.txt", "w") as output:
+    #     output.write(final_text)
     return final_text
 
 def convert_to_audio(text_input, voice_id, engine):
@@ -69,7 +68,6 @@ def convert_to_audio(text_input, voice_id, engine):
             response = polly.start_speech_synthesis_task(Text=text_input, OutputFormat="mp3",
                                                 VoiceId=voice_id, TextType="ssml", Engine =engine,
                                                          OutputS3BucketName='nikkodoteapps')
-            print(response)
         else:
             response = polly.synthesize_speech(Text=text_input, OutputFormat="mp3",
                                                          VoiceId=voice_id, TextType = "ssml", Engine=engine)
@@ -118,5 +116,3 @@ def long_audio_download(output_uri):
         s3.download_file(bucket_name, object_name, 'long_speech_conversion.mp3')
     else:
         raise
-text = convert_ppt_to_text("updated.pptx")
-convert_to_audio(text, "Joanna", "standard")

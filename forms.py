@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import StringField, SubmitField,  BooleanField, FloatField, IntegerField, SelectField, DateField, PasswordField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditorField
@@ -26,13 +27,27 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Let Me In!")
 
-class MorseCodeForm(FlaskForm):
-    raw_input = CKEditorField("Input", validators=[DataRequired()], render_kw={"style":"color:black;font-size:1.5rem;font-family: 'Libre Baskerville', serif;"})
-    submit = SubmitField("Translate!", render_kw={"style":"font-size:2rem; font-weight:600; color: coral; width:100%; text-align:center;"})
 
-class ConverterForm(FlaskForm):
-    raw_input = CKEditorField("Input", validators=[DataRequired()], render_kw={"style":"color:black;font-size:1.5rem;font-family: 'Libre Baskerville', serif;"})
-    submit = SubmitField("Convert!", render_kw={"style":"font-size:2rem; font-weight:600; color: goldenrod; width:100%; text-align:center;"})
+class MorseCodeForm(FlaskForm):
+    raw_input = CKEditorField("Input", validators=[DataRequired()], render_kw={"style":"color:black;font-size:1.5rem"
+                                                                                       ";font-family: 'Libre "
+                                                                                       "Baskerville', serif;"})
+    submit = SubmitField("Translate!", render_kw={"style":"font-size:2rem; font-weight:600; color: coral; width:100%; "
+                                                          "text-align:center;"})
+
+
+class TTSForm(FlaskForm):
+    ppt_file = FileField("Open PPTX File", validators=[DataRequired(), FileRequired(), FileAllowed(['pptx', 'pptm', 'ppt'], 'Powerpoint Files only')], render_kw={"style":"color:black;"
+                                                                                                                            "font-size:1.5rem;"
+                                                                                                                            "font-family: 'Libre Baskerville', serif;"})
+    voice = SelectField("Voice", choices = ['Joanna', 'Matthew', 'Amy', 'Brian', 'Russell', 'Olivia',])
+    engine = SelectField("Engine", choices = ['standard', 'neural'])
+    submit = SubmitField("Convert and Download!", render_kw={"style":"font-size:2rem; "
+                                                                     "font-weight:600; "
+                                                                     "color: goldenrod;"
+                                                                     " width:100%; "
+                                                                     "text-align:center;"
+                                                                     "outline: 0.2rem solid black"})
 
 
 class StrokeForm(FlaskForm):

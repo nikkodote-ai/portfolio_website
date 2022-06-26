@@ -7,14 +7,17 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from functools import wraps
 import pickle
-from forms import StrokeForm, CreateForm, RegisterForm, LoginForm, MorseCodeForm, ConverterForm
+from forms import StrokeForm, CreateForm, RegisterForm, LoginForm, MorseCodeForm, TTSForm
 import numpy as np
 from apps.strokeapp import model_stroke
 from datetime import datetime
 import logging
 from apps.morsecode import morse_app
+import secrets
+from apps.audiotopdfconverter import text_converter_app as tca
 
 
 app = Flask(__name__, template_folder='templates')
@@ -24,6 +27,10 @@ csrf = CSRFProtect(app)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL_UPDATED', 'sqlite:///portfolio.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+#for uploading files
+dir_path = os.path.dirname(os.path.realpath(__file__))
+app.config.update(UPLOAD_FILES_DEST = os.path.join(dir_path, "static\\uploaded_files\\"))
 csrf.init_app(app)
 
 db = SQLAlchemy(app)
@@ -160,6 +167,22 @@ def posts(id):
 
 #-----ML APPS hosted in the site----#
 
+@app.route('/apps/tts_converter', methods = ['POST', 'GET'])
+def text_audio_converter():
+    form = TTSForm()
+    if form.validate_on_submit():
+        f = form.ppt_file.data
+        file_name, extension = secure_filename(form.ppt_file.data.filename).split('.')
+        generated_filename = secrets.token_hex(15) + f".{extension}"
+        file_location = os.path.join(app.config['UPLOAD_FILES_DEST'], generated_filename)
+        #save the file in the cloud temporarily
+        f.save(file_location)
+        #convert and download
+        text_to_convert = tca.convert_ppt_to_text(file_location)
+        tca.convert_to_audio(text_to_convert, form.voice.data, form.engine.data)
+        return render_template("tts_success.html")
+    return render_template("text-audio_converter.html", form = form)
+
 @app.route('/apps/morse_code', methods = ['POST', 'GET'])
 def morse_code():
     output = ""
@@ -167,13 +190,6 @@ def morse_code():
     if form.validate_on_submit():
         output = morse_app.translate(form.raw_input.data.strip())
     return render_template("morse_code.html", form = form, output = output)
-
-@app.route('/apps/text-audio_converter', methods = ['POST', 'GET'])
-def text_audio_converter():
-    form = ConverterForm()
-    if form.validate_on_submit():
-        pass
-    return render_template("text-audio_converter.html", form = form)
 
 @app.route('/apps/stroke_prediction', methods = ['POST', 'GET'])
 def stroke_app():
@@ -209,7 +225,6 @@ def stroke_app():
         return render_template("stroke_result.html", form=form, prediction=prediction)
     return render_template("stroke_post.html", form = form)
 
-
 #-----LOGIN, REGISTRATION, AND AUTHENTICATION------#
 @app.route('/register', methods=["GET", "POST"])
 def register():
@@ -239,8 +254,6 @@ def register():
     return render_template("register.html", form=form, current_user=current_user)
 
 #---LOGIN REQUIREMENTS AND VIEWS----#
-
-
 @app.route('/login', methods=["GET", "POST"])
 def login():
     form = LoginForm()
