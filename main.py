@@ -31,8 +31,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #for uploading files
 dir_path = os.path.dirname(os.path.realpath(__file__))
-app.config.update(UPLOAD_FILES_DEST = "tmp")
-# app.config.update(UPLOAD_FILES_DEST = "C:\\Users\\nikko\\PycharmProjects\\Professional_Portfolio\\Portfolio_Website\\static\\uploaded_files")
+app.config.update(UPLOAD_FOLDER ="/tmp/")
+# app.config.update(UPLOAD_FOLDER = "C:\\Users\\nikko\\PycharmProjects\\Professional_Portfolio\\Portfolio_Website\\static\\uploaded_files")
 csrf.init_app(app)
 
 db = SQLAlchemy(app)
@@ -176,8 +176,8 @@ def text_audio_converter():
         f = form.ppt_file.data
         file_name, extension = secure_filename(form.ppt_file.data.filename).split('.')
         generated_filename = secrets.token_hex(15)
-        file_location_pptx = os.path.join(app.config['UPLOAD_FILES_DEST'], generated_filename + f".{extension}")
-        file_location_mp3 = os.path.join(app.config['UPLOAD_FILES_DEST'], generated_filename)
+        file_location_pptx = os.path.join(app.config['UPLOAD_FOLDER'], generated_filename + f".{extension}")
+        file_location_mp3 = os.path.join(app.config['UPLOAD_FOLDER'], generated_filename)
         f.save(file_location_pptx)
         #convert and download
         text_to_convert = tca.convert_ppt_to_text(file_location_pptx)
