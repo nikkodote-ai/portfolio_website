@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, url_for, redirect, flash, abo
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -88,7 +89,7 @@ def admin_only(f):
 
 @app.route('/')
 def home():
-    all_posts = Posts.query.all()
+    all_posts = Posts.query.all().order_by(desc())
     return render_template('index.html', all_posts = all_posts)
 
 @app.route('/contacts')
