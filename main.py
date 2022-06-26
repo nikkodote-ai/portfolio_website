@@ -89,7 +89,7 @@ def admin_only(f):
 
 @app.route('/')
 def home():
-    all_posts = Posts.query.all().order_by(desc())
+    all_posts = Posts.query.all()[::-1]
     return render_template('index.html', all_posts = all_posts)
 
 @app.route('/contacts')
