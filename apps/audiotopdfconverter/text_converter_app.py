@@ -65,13 +65,12 @@ def convert_to_audio(text_input, voice_id, engine, file_name):
 
     try:
         # Request speech synthesis
-        if len(text_input) > 2900:
-            response = polly.start_speech_synthesis_task(Text=text_input, OutputFormat="mp3",
+        response = polly.start_speech_synthesis_task(Text=text_input, OutputFormat="mp3",
                                                 VoiceId=voice_id, TextType="ssml", Engine =engine,
                                                          OutputS3BucketName='nikkodoteapps')
-        else:
-            response = polly.synthesize_speech(Text=text_input, OutputFormat="mp3",
-                                                         VoiceId=voice_id, TextType = "ssml", Engine=engine)
+        # else:
+        #     response = polly.synthesize_speech(Text=text_input, OutputFormat="mp3",
+        #                                                  VoiceId=voice_id, TextType = "ssml", Engine=engine)
 
     except (BotoCoreError, ClientError) as error:
         # The service returned an error, exit gracefully
@@ -79,23 +78,23 @@ def convert_to_audio(text_input, voice_id, engine, file_name):
         sys.exit(-1)
 
     # Characters less than 3000 can be converted using synthesize_speech and can be saved in the local disk right away
-    if "AudioStream" in response:
-            with closing(response["AudioStream"]) as stream:
-               output = f"{file_name}.mp3"
-               print(output)
-               try:
-                # Open a file for writing the output as a binary stream
-                    with open(output, "wb") as file:
-                       file.write(stream.read())
-                    response = wget.download(output)
-
-               except IOError as error:
-                  # Could not write to file, exit gracefully
-                  print(error)
-                  sys.exit(-1)
+    # if "AudioStream" in response:
+    #         with closing(response["AudioStream"]) as stream:
+    #            output = f"{file_name}.mp3"
+    #            print(output)
+    #            try:
+    #             # Open a file for writing the output as a binary stream
+    #                 with open(output, "wb") as file:
+    #                    file.write(stream.read())
+    #                 response = wget.download(output)
+    #
+    #            except IOError as error:
+    #               # Could not write to file, exit gracefully
+    #               print(error)
+    #               sys.exit(-1)
 
     #Long audio files needs asyncronous synthesis saving the output in the S3 bucket and not locally first then locally
-    elif 'OutputUri' in response['SynthesisTask']:
+    if 'OutputUri' in response['SynthesisTask']:
         print(response)
         long_audio_download(response['SynthesisTask']['OutputUri'])
     else:
@@ -111,11 +110,11 @@ def long_audio_download(output_uri):
                 aws_secret_access_key=AWSSecretKey)
     print(bucket_name + "\n" + object_name)
     try:
-        s3.download_file(bucket_name, object_name, 'long_speech_conversion.mp3')
+        s3.download_file(bucket_name, object_name, f'{output_uri}.mp3')
     except ClientError as e:
         print("Processing. Download once done")
         time.sleep(30)
-        s3.download_file(bucket_name, object_name, 'long_speech_conversion.mp3')
+        s3.download_file(bucket_name, object_name, f'{output_uri}.mp3')
     else:
         raise
 
