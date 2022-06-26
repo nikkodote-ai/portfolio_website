@@ -82,11 +82,11 @@ def convert_to_audio(text_input, voice_id, engine, file_name):
     if "AudioStream" in response:
             with closing(response["AudioStream"]) as stream:
                output = f"{file_name}.mp3"
-
+               print(output)
                try:
                 # Open a file for writing the output as a binary stream
-                #     with open(output, "wb") as file:
-                #        file.write(stream.read())
+                    with open(output, "wb") as file:
+                       file.write(stream.read())
                     response = wget.download(output)
 
                except IOError as error:
