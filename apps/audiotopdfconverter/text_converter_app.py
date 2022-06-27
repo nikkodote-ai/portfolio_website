@@ -2,7 +2,7 @@ import os
 import re
 import sys
 import time
-
+import wget
 import PyPDF2
 from boto3 import Session, resource
 from botocore.exceptions import BotoCoreError, ClientError
@@ -124,7 +124,8 @@ def long_audio_download(output_uri):
     while True:
         if object_name not in bucket_files:
             print('File not yet found. Will retry')
-            time.sleep(4)
+            print(f'try going to https://{bucket_name}.s3.amazonaws.com/{object_name} ')
+            time.sleep(5)
             continue
         break
 
