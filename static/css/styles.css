@@ -5489,6 +5489,10 @@ p.card-text{
   outline: 0;
 }
 
+.logo{
+max-height: 70%;
+max-width: 70%}
+
 .modal-dialog {
   position: relative;
   width: auto;

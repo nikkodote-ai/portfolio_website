@@ -117,9 +117,16 @@ def long_audio_download(output_uri):
     print(bucket_name + "\n" + object_name)
     my_bucket = s3.Bucket(bucket_name)
     files = my_bucket.objects.all()
-    bucket_files = [file for file in files]
+    bucket_files = [file.key for file in files]
     print(f'bucket files: {bucket_files}')
     print(f'my object name to match : {object_name}')
+
+    while True:
+        if object_name not in bucket_files:
+            print('File not yet found. Will retry')
+            time.sleep(1)
+            continue
+        break
 
     try:
         return download_file(bucket_name, object_name)
