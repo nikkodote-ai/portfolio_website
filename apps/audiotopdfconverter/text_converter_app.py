@@ -124,7 +124,7 @@ def long_audio_download(output_uri):
     while True:
         if object_name not in bucket_files:
             print('File not yet found. Will retry')
-            time.sleep(1)
+            time.sleep(4)
             continue
         break
 
