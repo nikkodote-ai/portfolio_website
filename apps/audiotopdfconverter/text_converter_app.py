@@ -2,7 +2,6 @@ import os
 import re
 import sys
 import time
-import wget
 import PyPDF2
 from boto3 import Session, resource
 from botocore.exceptions import BotoCoreError, ClientError
@@ -13,7 +12,7 @@ AWSAccessKeyId = os.getenv('AWSAccessKeyId')
 AWSSecretKey = os.getenv('AWSSecretKey')
 s3 = resource('s3', region_name="ap-southeast-2", aws_access_key_id=AWSAccessKeyId, aws_secret_access_key=AWSSecretKey)
 
-
+#in case the functionality of the app is extended, so far this function is unused
 def convert_to_text(pdf_text):
     # create an object variable in rb mode
     with open(pdf_text, 'rb') as pdf_file:
@@ -36,6 +35,11 @@ def convert_to_text(pdf_text):
 
 
 def convert_ppt_to_text(file_name):
+    """
+    Converts powerpoint to ssml file used to convert text to audio
+    :param file_name: pptx/pptm to be converted
+    :return: str, final text
+    """
     prs = Presentation(file_name)
     text_runs = {}
 
@@ -58,7 +62,14 @@ def convert_ppt_to_text(file_name):
     return final_text
 
 
-def convert_to_audio(text_input, voice_id, engine, file_name):
+def convert_to_audio(text_input, voice_id, engine):
+    """
+    Converts the collected text into audio using AWS Polly.
+    :param text_input: must be str
+    :param voice_id: AWS Voice choice that the author handpicked arbitrarily.
+    :param engine: from th choice ['standard'|'neural']
+    :return: fileobject
+    """
     # Create a client using the credentials and region defined in the [adminuser]
     # section of the AWS credentials file (~/.aws/credentials).
     session = Session(aws_access_key_id=AWSAccessKeyId, aws_secret_access_key=AWSSecretKey,
@@ -108,6 +119,15 @@ def convert_to_audio(text_input, voice_id, engine, file_name):
 
 
 def long_audio_download(output_uri):
+    """
+    Given an .mp3 uri from converted ppt files stored in AWS S3,
+    the bucket name and file name are taken to try to download the
+    file if it exists. If has not existed yet, retry after some time
+    because it might not be detected in S3 bucket yet.
+    :param output_uri:
+    :return:
+    """
+    #parse the URI to get the params used download the converted file stored in S3.
     output_uri = output_uri.split('/')
     print(output_uri)
     bucket_name = output_uri[-2]
@@ -115,6 +135,7 @@ def long_audio_download(output_uri):
     print(f"bucket_name: {bucket_name}")
     print(f"object_name: {object_name}")
     print(bucket_name + "\n" + object_name)
+    #Instantiate bucket and file object using boto3 s3 resource.
     my_bucket = s3.Bucket(bucket_name)
     files = my_bucket.objects.all()
     bucket_files = [file.key for file in files]
@@ -128,7 +149,6 @@ def long_audio_download(output_uri):
             print(f'>>>bucket files: {bucket_files}')
             print(f'>>>my object name to match : {object_name}')
             try:
-                print('Download successful')
                 return download_file(bucket_name, object_name)
             except ClientError as e:
                 print(f'Error while trying. Error: {e.args}')
@@ -150,14 +170,22 @@ def long_audio_download(output_uri):
     # else:
     #     print("Download not done")
 
-
+#not used but retained until AWS Lambda is setup
 def delete_file(bucket_name, file_name):
     my_bucket = s3.Bucket(bucket_name)
     my_bucket.Object(file_name).delete()
+    print(f'Delete {file_name} from {bucket_name} successful.')
 
 
 def download_file(bucket_name, file_name):
+    """
+    Download the object from AWS S3
+    :param bucket_name: name of the AWS S3 bucket
+    :param file_name: the key of the object
+    :return s3 resource.Bucket.Object.key:
+    """
     my_bucket = s3.Bucket(bucket_name)
     file_object = my_bucket.Object(file_name).get()
+    print(f'Download {file_name}successful')
     return file_object
 
