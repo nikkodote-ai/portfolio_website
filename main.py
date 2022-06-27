@@ -195,12 +195,12 @@ def text_audio_converter():
         text_to_convert = tca.convert_ppt_to_text(file_location_pptx)
         file_object = tca.convert_to_audio(text_to_convert, form.voice.data, form.engine.data, file_location_mp3)
         print(file_object)
-        Response(
+        return Response(
             file_object['Body'].read(),
             mimetype='text/plain',
             headers={'Content-Disposition': f"attachment;filename={generated_filename}.mp3"}
         )
-        return render_template('tts_success.html')
+
     return render_template("text-audio_converter.html", form=form)
 
 @app.route('/apps/morse_code', methods=['POST', 'GET'])
