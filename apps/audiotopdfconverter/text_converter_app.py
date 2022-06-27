@@ -125,6 +125,12 @@ def long_audio_download(output_uri):
         if object_name not in bucket_files:
             print('File not yet found. Will retry')
             print(f'try going to https://{bucket_name}.s3.amazonaws.com/{object_name} ')
+            print(f'>>>bucket files: {bucket_files}')
+            print(f'>>>my object name to match : {object_name}')
+            try:
+                return download_file(bucket_name, object_name)
+            except:
+                print('Error while trying')
             time.sleep(5)
             continue
         break
