@@ -183,10 +183,11 @@ def text_audio_converter():
         #convert and download
         text_to_convert = tca.convert_ppt_to_text(file_location_pptx)
         file_object = tca.convert_to_audio(text_to_convert, form.voice.data, form.engine.data, file_location_mp3)
+        print(file_object)
         return Response(
             file_object['Body'].read(),
             mimetype='text/plain',
-            headers={'Content-Disposition': f"attachment;filename{generated_filename}.mp3"}
+            headers={'Content-Disposition': f"attachment;filename={generated_filename}.mp3"}
         )
     return render_template("text-audio_converter.html", form = form)
 
