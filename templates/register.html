@@ -5,27 +5,27 @@
 {%include 'header.html'%}
 <div class="container">
     <div class="row">
-      <div class="col-lg-6 col-md-10 mx-auto form-text">
+        <div class="col-lg-6 col-md-10 mx-auto form-text">
 
-<!--          add flash messages-->
-     {% with messages = get_flashed_messages() %}
-              {% if messages %}
-                <ul class=flashes>
+            <!--          add flash messages-->
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class=flashes>
                 {% for message in messages %}
-                  <li style = 'color:#FF0000; font-weight: 700' >{{ message }}</li>
+                <li style='color:#FF0000; font-weight: 700'>{{ message }}</li>
                 {% endfor %}
-                </ul>
-              {% endif %}
-          {% endwith %}
+            </ul>
+            {% endif %}
+            {% endwith %}
 
-          <!-- This is where the form will go -->
-          <h1>Register as Admin</h1>
-        {{wtf.quick_form(form)}}
+            <!-- This is where the form will go -->
+            <h1>Register as Admin</h1>
+            {{wtf.quick_form(form)}}
 
 
-      </div>
+        </div>
     </div>
-  </div>
+</div>
 
 {%include 'footer.html'%}
 {%endblock%}

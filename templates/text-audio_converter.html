@@ -6,37 +6,37 @@
 
 <div class="container center-form color">
     <div class="row">
-          <!-- This is where the form will go -->
-    <div class="center-form col-lg-6 form-font">
-        <h1 class="post-title"> Text to Audio Converter </h1>
-        <br>
-        <!--          add flash messages-->
-     {% with messages = get_flashed_messages() %}
-              {% if messages %}
-                <ul class=flashes>
+        <!-- This is where the form will go -->
+        <div class="center-form col-lg-6 form-font">
+            <h1 class="post-title"> Text to Audio Converter </h1>
+            <br>
+            <!--          add flash messages-->
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class=flashes>
                 {% for message in messages %}
-                  <li style = 'color:#FF0000; font-weight: 700' >{{ message }}</li>
+                <li style='color:#FF0000; font-weight: 700'>{{ message }}</li>
                 {% endfor %}
-                </ul>
-              {% endif %}
-          {% endwith %}
-        <hr>
-        <br>
-        {{wtf.quick_form(form)}}
-        <br>
-        <hr>
-        <br>
-    </div>
-        <div class = "col-lg-4">
+            </ul>
+            {% endif %}
+            {% endwith %}
+            <hr>
             <br>
+            {{wtf.quick_form(form)}}
             <br>
-        <h3 class="home-h3">Author: Nikko Dote <br>
-            This app translates an input to Morse Code and vice versa.
-            It's setup to predict if the input alphanumeric or in morse and will translate accordingly.
-            The ambitious goal would be to translate sounds to words or vice versa.</h3>
+            <hr>
+            <br>
         </div>
-</div>
+        <div class="col-lg-4">
+            <br>
+            <br>
+            <h3 class="home-h3">Author: Nikko Dote <br>
+                This app translates an input to Morse Code and vice versa.
+                It's setup to predict if the input alphanumeric or in morse and will translate accordingly.
+                The ambitious goal would be to translate sounds to words or vice versa.</h3>
+        </div>
     </div>
-  </div>
+</div>
+</div>
 
 {%endblock%}

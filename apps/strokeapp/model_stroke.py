@@ -1,16 +1,17 @@
-import pandas as pd
 import pickle
 
-#model
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import train_test_split
+import pandas as pd
 from imblearn.over_sampling import RandomOverSampler
+from sklearn.model_selection import train_test_split
+# model
+from sklearn.tree import DecisionTreeClassifier
 
-#Data from Kaggle
+# Data from Kaggle
 df = pd.read_csv("apps/strokeapp/healthcare-dataset-stroke-data.csv")
 
-#Preprocessing
+# Preprocessing
 columns_to_onehot = ['gender', 'work_type', 'smoking_status']
+
 
 def onehot_code(df, columns):
     """Takes a dataframe and a list of columns that are to be onehot coded. Returns a dataframe"""
@@ -42,7 +43,7 @@ def preprocessing(df, target):
 
     y = df[target]
 
-    #To overcome the class imbalance, implement Oversampling
+    # To overcome the class imbalance, implement Oversampling
     ros = RandomOverSampler(random_state=0)
     X, y = ros.fit_resample(X, y)
 
@@ -57,14 +58,16 @@ def preprocessing(df, target):
 
     return X_train, X_test, y_train, y_test
 
-def predict(form_answers : list):
+
+def predict(form_answers: list):
     return clf.predict(form_answers)
+
 
 def make_pkl():
     pickle.dump(clf, open('apps/strokeapp/model_stroke.pkl', 'wb'))
+
 
 X_train_oversampled, X_test_oversampled, y_train_oversampled, y_test_oversampled = preprocessing(df, 'stroke')
 
 clf = DecisionTreeClassifier()
 clf.fit(X_train_oversampled, y_train_oversampled)
-

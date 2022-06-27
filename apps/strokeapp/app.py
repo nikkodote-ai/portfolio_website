@@ -1,10 +1,10 @@
 import os
 import pickle
 
+import numpy as np
 from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
 
-import numpy as np
 from forms import CreateForm
 
 app = Flask(__name__)
@@ -19,20 +19,20 @@ model = pickle.load(open('/apps/strokeapp/model_stroke.pkl', 'rb'))
 def home():
     form = CreateForm()
     if request.method == "POST":
-        #onehot code some of the answers because that is what the model requires
-        gender_onehot = {choice[0]:0 for choice in form.gender.choices}
+        # onehot code some of the answers because that is what the model requires
+        gender_onehot = {choice[0]: 0 for choice in form.gender.choices}
         gender_onehot[form.gender.data] = 1
         print(gender_onehot)
-        worktype_onehot = {choice[0]:0 for choice in form.work_type.choices}
+        worktype_onehot = {choice[0]: 0 for choice in form.work_type.choices}
         worktype_onehot[form.work_type.data] = 1
         print(worktype_onehot)
-        smoking_status_onehot = {choice[0]:0 for choice in form.smoking_status.choices}
+        smoking_status_onehot = {choice[0]: 0 for choice in form.smoking_status.choices}
         smoking_status_onehot[form.smoking_status.data] = 1
         print(smoking_status_onehot)
         # collate users answer
         form_answers = [[
             form.age.data, int(form.hypertension.data),
-            int(form.heart_disease.data), int(form.ever_married.data),int(form.residence_type.data),
+            int(form.heart_disease.data), int(form.ever_married.data), int(form.residence_type.data),
             form.avg_glucose_level.data, form.bmi.data,
             gender_onehot['female'], gender_onehot['male'], gender_onehot['other'],
             worktype_onehot['govt_job'], worktype_onehot['never_worked'], worktype_onehot['private'],

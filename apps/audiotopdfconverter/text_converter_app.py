@@ -1,30 +1,29 @@
+import os
+import re
+import sys
+import time
+
 import PyPDF2
 from boto3 import Session, resource
 from botocore.exceptions import BotoCoreError, ClientError
-from contextlib import closing
-import os
-import sys
 from pptx import Presentation
-import re
-import time
-import wget
-
 
 # from https://docs.aws.amazon.com/polly/latest/dg/get-started-what-next.html
-AWSAccessKeyId=os.getenv('AWSAccessKeyId')
-AWSSecretKey=os.getenv('AWSSecretKey')
+AWSAccessKeyId = os.getenv('AWSAccessKeyId')
+AWSSecretKey = os.getenv('AWSSecretKey')
 s3 = resource('s3', region_name="ap-southeast-2", aws_access_key_id=AWSAccessKeyId, aws_secret_access_key=AWSSecretKey)
-pdf_text = 'sample_text.pdf'
+
+
 def convert_to_text(pdf_text):
-    #create an object variable in rb mode
+    # create an object variable in rb mode
     with open(pdf_text, 'rb') as pdf_file:
-        #create a pdf reader
+        # create a pdf reader
         pdf_reader = PyPDF2.PdfFileReader(pdf_file)
-        #number of pages in the pdf
+        # number of pages in the pdf
         num_pages = pdf_reader.getNumPages()
-        #get all the pages from the beginning of the pdf to last
-        pages = pdf_reader.getPage(num_pages-1)
-        #store text
+        # get all the pages from the beginning of the pdf to last
+        pages = pdf_reader.getPage(num_pages - 1)
+        # store text
         text = pages.extractText()
         text = text.split('\n')
         text = ''.join(text)
@@ -35,18 +34,19 @@ def convert_to_text(pdf_text):
             output.writelines(text)
         return text
 
+
 def convert_ppt_to_text(file_name):
     prs = Presentation(file_name)
     text_runs = {}
 
     for index, slide in enumerate(prs.slides):
-        text_runs[index+1] = []
+        text_runs[index + 1] = []
         for shape in slide.shapes:
             if not shape.has_text_frame:
                 continue
             for paragraph in shape.text_frame.paragraphs:
                 for run in paragraph.runs:
-                    text_runs[index+1].append(f"<p>{run.text}</p>")
+                    text_runs[index + 1].append(f"<p>{run.text}</p>")
 
     final_text = ''
     for slide_index, texts in text_runs.items():
@@ -57,17 +57,19 @@ def convert_ppt_to_text(file_name):
     #     output.write(final_text)
     return final_text
 
+
 def convert_to_audio(text_input, voice_id, engine, file_name):
     # Create a client using the credentials and region defined in the [adminuser]
     # section of the AWS credentials file (~/.aws/credentials).
-    session = Session(aws_access_key_id= AWSAccessKeyId, aws_secret_access_key=AWSSecretKey, region_name = 'ap-southeast-2' )
+    session = Session(aws_access_key_id=AWSAccessKeyId, aws_secret_access_key=AWSSecretKey,
+                      region_name='ap-southeast-2')
     polly = session.client("polly")
 
     try:
         # Request speech synthesis
         response = polly.start_speech_synthesis_task(Text=text_input, OutputFormat="mp3",
-                                                VoiceId=voice_id, TextType="ssml", Engine =engine,
-                                                         OutputS3BucketName='nikkodoteapps')
+                                                     VoiceId=voice_id, TextType="ssml", Engine=engine,
+                                                     OutputS3BucketName='nikkodoteapps')
         # else:
         #     response = polly.synthesize_speech(Text=text_input, OutputFormat="mp3",
         #                                                  VoiceId=voice_id, TextType = "ssml", Engine=engine)
@@ -93,7 +95,7 @@ def convert_to_audio(text_input, voice_id, engine, file_name):
     #               print(error)
     #               sys.exit(-1)
 
-    #Long audio files needs asyncronous synthesis saving the output in the S3 bucket and not locally first then locally
+    # Long audio files needs asyncronous synthesis saving the output in the S3 bucket and not locally first then locally
     if 'OutputUri' in response['SynthesisTask']:
         print(response)
         return long_audio_download(response['SynthesisTask']['OutputUri'])
@@ -101,6 +103,7 @@ def convert_to_audio(text_input, voice_id, engine, file_name):
         # The response didn't contain audio data, exit gracefully
         print("Could not stream audio")
         sys.exit(-1)
+
 
 def long_audio_download(output_uri):
     output_uri = output_uri.split('/')
@@ -120,9 +123,11 @@ def long_audio_download(output_uri):
     else:
         print("Download not done")
 
+
 def delete_file(bucket_name, file_name):
     my_bucket = s3.Bucket(bucket_name)
     my_bucket.Object(file_name).delete()
+
 
 def download_file(bucket_name, file_name):
     my_bucket = s3.Bucket(bucket_name)
