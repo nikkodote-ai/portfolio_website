@@ -165,7 +165,7 @@ def edit_post(post_id):
     return render_template('edit_post.html', post=post, form=edit_form)
 
 
-@app.route('/edit_post/<int:post_id>', methods=['POST', 'GET'])
+@app.route('/delete_post/<int:post_id>', methods=['POST', 'GET'])
 def delete_post(post_id):
     post_to_delete = Posts.query.get(post_id)
     db.session.delete(post_to_delete)
