@@ -104,13 +104,17 @@ def convert_to_audio(text_input, voice_id, engine, file_name):
 
 def long_audio_download(output_uri):
     output_uri = output_uri.split('/')
+    print(output_uri)
     bucket_name = output_uri[-2]
     object_name = output_uri[-1]
+    print(f"bucket_name: {bucket_name}")
+    print(f"object_name: {object_name}")
     s3 = client('s3', region_name="ap-southeast-2", aws_access_key_id=AWSAccessKeyId, aws_secret_access_key=AWSSecretKey)
     print(bucket_name + "\n" + object_name)
     try:
         s3.download_file(bucket_name, object_name, os.path.join("C:\\Users\\nikko\\Downloads", object_name))
     except ClientError as e:
+        print(e.error)
         print("Processing. Download once done")
         time.sleep(25)
         s3.download_file(bucket_name, object_name, os.path.join("C:\\Users\\nikko\\Downloads", object_name))
