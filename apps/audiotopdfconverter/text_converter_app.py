@@ -1,5 +1,5 @@
 import PyPDF2
-from boto3 import Session, client
+from boto3 import Session, resource
 from botocore.exceptions import BotoCoreError, ClientError
 from contextlib import closing
 import os
@@ -13,7 +13,7 @@ import wget
 # from https://docs.aws.amazon.com/polly/latest/dg/get-started-what-next.html
 AWSAccessKeyId=os.getenv('AWSAccessKeyId')
 AWSSecretKey=os.getenv('AWSSecretKey')
-
+s3 = resource('s3', region_name="ap-southeast-2", aws_access_key_id=AWSAccessKeyId, aws_secret_access_key=AWSSecretKey)
 pdf_text = 'sample_text.pdf'
 def convert_to_text(pdf_text):
     #create an object variable in rb mode
@@ -96,7 +96,7 @@ def convert_to_audio(text_input, voice_id, engine, file_name):
     #Long audio files needs asyncronous synthesis saving the output in the S3 bucket and not locally first then locally
     if 'OutputUri' in response['SynthesisTask']:
         print(response)
-        long_audio_download(response['SynthesisTask']['OutputUri'])
+        return long_audio_download(response['SynthesisTask']['OutputUri'])
     else:
         # The response didn't contain audio data, exit gracefully
         print("Could not stream audio")
@@ -109,16 +109,24 @@ def long_audio_download(output_uri):
     object_name = output_uri[-1]
     print(f"bucket_name: {bucket_name}")
     print(f"object_name: {object_name}")
-    s3 = client('s3', region_name="ap-southeast-2", aws_access_key_id=AWSAccessKeyId, aws_secret_access_key=AWSSecretKey)
     print(bucket_name + "\n" + object_name)
     try:
-        s3.download_file(bucket_name, object_name, "C:\\Users\\nikko\\Downloads\\long_speech.mp3")
+        return download_file(bucket_name, object_name)
     except ClientError as e:
         print(e)
         print("Processing. Download once done")
         time.sleep(25)
-        s3.download_file(bucket_name, object_name, "C:\\Users\\nikko\\Downloads\\long_speech.mp3")
+        return download_file(bucket_name, object_name)
     else:
         print("Download not done")
+
+def delete_file(bucket_name, file_name):
+    my_bucket = s3.Bucket(bucket_name)
+    my_bucket.Object(file_name).delete()
+
+def download_file(bucket_name, file_name):
+    my_bucket = s3.Bucket(bucket_name)
+    file_object = my_bucket.Object(file_name).get()
+    return file_object
 
 # long_audio_download("https://s3.console.aws.amazon.com/s3/object/nikkodoteapps/0626b855-941f-4a81-bec1-4e91193b7bc1.mp3")

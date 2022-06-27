@@ -1,6 +1,6 @@
 import os
 import sys
-from flask import Flask, render_template, request, url_for, redirect, flash, abort, send_file
+from flask import Flask, render_template, request, url_for, redirect, flash, abort, Response
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
@@ -182,8 +182,12 @@ def text_audio_converter():
         f.save(file_location_pptx)
         #convert and download
         text_to_convert = tca.convert_ppt_to_text(file_location_pptx)
-        tca.convert_to_audio(text_to_convert, form.voice.data, form.engine.data, file_location_mp3)
-        return render_template("tts_success.html")
+        file_object = tca.convert_to_audio(text_to_convert, form.voice.data, form.engine.data, file_location_mp3)
+        return Response(
+            file_object['Body'].Read(),
+            mimetype='text/plain',
+            headers={'Content-Disposition': f"attachment;filename{generated_filename}.mp3"}
+        )
     return render_template("text-audio_converter.html", form = form)
 
 @app.route('/apps/morse_code', methods = ['POST', 'GET'])
