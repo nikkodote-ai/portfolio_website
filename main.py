@@ -180,7 +180,9 @@ def posts(id):
 
 
 # -----ML APPS hosted in the site----#
-
+@app.route('/apps/tts_converters', methods=['POST', 'GET'])
+def tts_converter():
+    pass
 @app.route('/apps/tts_converter', methods=['POST', 'GET'])
 def text_audio_converter():
     form = TTSForm()
@@ -201,6 +203,7 @@ def text_audio_converter():
             headers={'Content-Disposition': f"attachment;filename={generated_filename}.mp3"}
         )
     return render_template("text-audio_converter.html", form=form)
+
 
 
 @app.route('/apps/morse_code', methods=['POST', 'GET'])

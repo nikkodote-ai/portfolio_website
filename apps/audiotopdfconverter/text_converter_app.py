@@ -79,7 +79,8 @@ def convert_to_audio(text_input, voice_id, engine, file_name):
         print(error)
         sys.exit(-1)
 
-    # Characters less than 3000 can be converted using synthesize_speech and can be saved in the local disk right away
+    # Characters less than 3000 can be converted using synthesize_speech
+    # and can be saved in the local disk right away
     # if "AudioStream" in response:
     #         with closing(response["AudioStream"]) as stream:
     #            output = f"{file_name}.mp3"
@@ -95,7 +96,8 @@ def convert_to_audio(text_input, voice_id, engine, file_name):
     #               print(error)
     #               sys.exit(-1)
 
-    # Long audio files needs asyncronous synthesis saving the output in the S3 bucket and not locally first then locally
+    # Long audio files needs asynchronous synthesis saving the output
+    # in the S3 bucket and not locally first then locally
     if 'OutputUri' in response['SynthesisTask']:
         print(response)
         return long_audio_download(response['SynthesisTask']['OutputUri'])
@@ -134,4 +136,3 @@ def download_file(bucket_name, file_name):
     file_object = my_bucket.Object(file_name).get()
     return file_object
 
-# long_audio_download("https://s3.console.aws.amazon.com/s3/object/nikkodoteapps/0626b855-941f-4a81-bec1-4e91193b7bc1.mp3")
