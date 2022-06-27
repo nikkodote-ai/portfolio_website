@@ -180,9 +180,7 @@ def posts(id):
 
 
 # -----ML APPS hosted in the site----#
-@app.route('/apps/tts_converters', methods=['POST', 'GET'])
-def tts_converter():
-    pass
+
 @app.route('/apps/tts_converter', methods=['POST', 'GET'])
 def text_audio_converter():
     form = TTSForm()
