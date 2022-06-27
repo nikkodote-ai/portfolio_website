@@ -87,11 +87,11 @@
                 <div class="col-md-4 mb-5">
                     <div class="card h-100">
                         <div class="card-body">
-                            <img class="card-img" src="{{post.img_url}}">
+                            <a href ="{{url_for(post.post_url)}}"><img class="card-img" src="{{post.img_url}}"></a>
                             <h2 class="card-title">{{post.title}}</h2>
                             <p class="card-text">{{post.subtitle}}</p>
                         </div>
-                        <div class="card-footer"><a class="btn btn-primary btn-sm" href="{{url_for(post.post_url)}}">Read
+                        <div class="card-footer"><a class="btn btn-dark btn-sm" href="{{url_for(post.post_url)}}">Read
                             More</a></div>
                         {%if current_user.is_authenticated:%}
                         <div class="card-footer"><a class="btn btn-danger btn-sm"
