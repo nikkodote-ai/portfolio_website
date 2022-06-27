@@ -125,29 +125,30 @@ def long_audio_download(output_uri):
         if object_name not in bucket_files:
             print('File not yet found. Will retry')
             print(f'try going to https://{bucket_name}.s3.amazonaws.com/{object_name} ')
-            # print(f'>>>bucket files: {bucket_files}')
-            # print(f'>>>my object name to match : {object_name}')
+            print(f'>>>bucket files: {bucket_files}')
+            print(f'>>>my object name to match : {object_name}')
             try:
-                print(f'TRY: bucket files: {bucket_files}')
-                print(f'TRY: my object name to match : {object_name}')
                 print('Download successful')
                 return download_file(bucket_name, object_name)
-            except:
-                print('Error while trying')
+            except ClientError as e:
+                print(f'Error while trying. Error: {e.args}')
+
+            else:
+                print('File not converted')
             time.sleep(5)
             continue
         break
 
-    try:
-        return download_file(bucket_name, object_name)
-
-    except ClientError as e:
-        print(e)
-        print("Processing. Download once done")
-        time.sleep(25)
-        return download_file(bucket_name, object_name)
-    else:
-        print("Download not done")
+    # try:
+    #     return download_file(bucket_name, object_name)
+    #
+    # except ClientError as e:
+    #     print(e)
+    #     print("Processing. Download once done")
+    #     time.sleep(25)
+    #     return download_file(bucket_name, object_name)
+    # else:
+    #     print("Download not done")
 
 
 def delete_file(bucket_name, file_name):
