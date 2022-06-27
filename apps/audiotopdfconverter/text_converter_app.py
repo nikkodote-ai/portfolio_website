@@ -116,8 +116,8 @@ def long_audio_download(output_uri):
     print(f"object_name: {object_name}")
     print(bucket_name + "\n" + object_name)
     my_bucket = s3.Bucket(bucket_name)
-    my_bucket.objects.all()
-    bucket_files = [file for file in my_bucket]
+    files = my_bucket.objects.all()
+    bucket_files = [file for file in files]
     print(f'bucket files: {bucket_files}')
     print(f'my object name to match : {object_name}')
 
