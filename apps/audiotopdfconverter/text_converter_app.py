@@ -112,8 +112,9 @@ def long_audio_download(output_uri):
         s3.download_file(bucket_name, object_name, os.path.join("C:\\Users\\nikko\\Downloads", object_name))
     except ClientError as e:
         print("Processing. Download once done")
-        time.sleep(20)
+        time.sleep(25)
         s3.download_file(bucket_name, object_name, os.path.join("C:\\Users\\nikko\\Downloads", object_name))
     else:
-        raise
+        print("Download not done")
 
+# long_audio_download("https://s3.console.aws.amazon.com/s3/object/nikkodoteapps/0626b855-941f-4a81-bec1-4e91193b7bc1.mp3")
