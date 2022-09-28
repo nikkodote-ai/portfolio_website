@@ -98,6 +98,12 @@ def home():
     all_posts = Posts.query.all()[::-1]
     return render_template('index.html', all_posts=all_posts)
 
+@app.route('/biomedical/eposter/<str: eposter_name>', methods = ['POST', 'GET'])
+def show_poster(eposter_name):
+    if eposter_name == "aacb_fcal_2022":
+       return render_template('aacb_fcal_2022.html')
+    return render_template('aacb_fcal_2022.html')
+
 
 @app.route('/contacts')
 def contacts():
