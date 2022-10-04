@@ -98,7 +98,7 @@ def home():
     all_posts = Posts.query.all()[::-1]
     return render_template('index.html', all_posts=all_posts)
 
-
+#redirecting
 @app.route('/biomedical/eposter/<eposter_name>', methods=['POST', 'GET'])
 def show_poster(eposter_name):
     if eposter_name == "aacb_fcal_2022":
@@ -106,6 +106,20 @@ def show_poster(eposter_name):
         # return redirect('https://www.canva.com/design/DAFNqA6k8dk/67QJtyvKChFQFx0J3PxT5g/view?website#2', code=302)
     return render_template('aacb_fcal_2022.html')
 
+##quantum blue url
+@app.route('/link?target=https%3A%2F%2Fwww.buhlmannlabs.ch%2Fproducts-solutions%2Fquantum-blue%2F&design=DAFNqA6k8dk&accessRole=owner&linkSource=document', methods = ['POST', 'GET'])
+def quantum_blue():
+    return redirect('https://www.buhlmannlabs.ch/products-solutions/quantum-blue/')
+
+##fcal url
+@app.route('/link?target=https%3A%2F%2Fbuhlmannlabs.com%2Fbuhlmann-fcal-turbo%2F&design=DAFNqA6k8dk&accessRole=owner&linkSource=document', methods = ['POST', 'GET'])
+def fcal():
+    return redirect('https://buhlmannlabs.com/buhlmann-fcal-turbo/')
+
+## optilite url
+@app.route('/link?target=https%3A%2F%2Fwww.bindingsite.com%2Fen%2Four-products%2Fclinical-chemistry%2Foptilite%2Foverview&design=DAFNqA6k8dk&accessRole=owner&linkSource=document', methods = ['POST', 'GET'])
+def optilite():
+    return redirect('https://www.bindingsite.com/en/our-products/clinical-chemistry/optilite/overview')
 
 @app.route('/contacts')
 def contacts():
