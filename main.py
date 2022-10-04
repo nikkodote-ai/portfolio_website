@@ -102,7 +102,7 @@ def home():
 @app.route('/biomedical/eposter/<eposter_name>', methods=['POST', 'GET'])
 def show_poster(eposter_name):
     if eposter_name == "aacb_fcal_2022":
-        return redirect('https://www.canva.com/design/DAFNqA6k8dk/67QJtyvKChFQFx0J3PxT5g/view?website#2')
+        return redirect('https://www.canva.com/design/DAFNqA6k8dk/67QJtyvKChFQFx0J3PxT5g/view?website#2', code=307)
     return render_template('aacb_fcal_2022.html')
 
 
