@@ -107,6 +107,7 @@ def show_poster(eposter_name):
     return render_template('aacb_fcal_2022.html')
 
 ##quantum blue url
+
 @app.route('/link?target=https%3A%2F%2Fwww.buhlmannlabs.ch%2Fproducts-solutions%2Fquantum-blue%2F&design=DAFNqA6k8dk&accessRole=owner&linkSource=document', methods = ['POST', 'GET'])
 def quantum_blue():
     return redirect('https://www.buhlmannlabs.ch/products-solutions/quantum-blue/')
