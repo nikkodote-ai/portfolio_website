@@ -102,23 +102,23 @@ def home():
 @app.route('/biomedical/eposter/<eposter_name>', methods=['POST', 'GET'])
 def show_poster(eposter_name):
     if eposter_name == "aacb_fcal_2022":
-        return render_template('aacb_fcal_2022.html')
-        # return redirect('https://www.canva.com/design/DAFNqA6k8dk/67QJtyvKChFQFx0J3PxT5g/view?website#2', code=302)
+        # return render_template('aacb_fcal_2022.html')
+        return redirect('https://www.canva.com/design/DAFNqA6k8dk/67QJtyvKChFQFx0J3PxT5g/view?website#2', code=302)
     return render_template('aacb_fcal_2022.html')
 
 ##quantum blue url
 
-@app.route('/biomedical/eposter/asset/qb', methods = ['POST', 'GET'])
+@app.route('/biomedical/eposter/qb', methods = ['POST', 'GET'])
 def quantum_blue():
     return redirect('https://www.buhlmannlabs.ch/products-solutions/quantum-blue/')
 
 ##fcal url
-@app.route('/biomedical/eposter/asset/turbo', methods = ['POST', 'GET'])
+@app.route('/biomedical/eposter/turbo', methods = ['POST', 'GET'])
 def fcal():
     return redirect('https://buhlmannlabs.com/buhlmann-fcal-turbo/')
 
 ## optilite url
-@app.route('/biomedical/eposter/asset/optilite', methods = ['POST', 'GET'])
+@app.route('/biomedical/eposter/optilite', methods = ['POST', 'GET'])
 def optilite():
     return redirect('https://www.bindingsite.com/en/our-products/clinical-chemistry/optilite/overview')
 
