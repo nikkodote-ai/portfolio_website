@@ -99,12 +99,12 @@ def home():
     return render_template('index.html', all_posts=all_posts)
 
 #redirecting
-@app.route('/biomedical/eposter/<eposter_name>', methods=['POST', 'GET'])
-def show_poster(eposter_name):
-    if eposter_name == "aacb_fcal_2022":
-        # return render_template('aacb_fcal_2022.html')
-        return redirect('https://www.canva.com/design/DAFNqA6k8dk/67QJtyvKChFQFx0J3PxT5g/view?website#2', code=302)
-    return render_template('aacb_fcal_2022.html')
+# @app.route('/biomedical/eposter/<eposter_name>', methods=['POST', 'GET'])
+# def show_poster(eposter_name):
+#     if eposter_name == "aacb_fcal_2022":
+#         # return render_template('aacb_fcal_2022.html')
+#         return redirect('https://www.canva.com/design/DAFNqA6k8dk/67QJtyvKChFQFx0J3PxT5g/view?website#2', code=302)
+#     return render_template('aacb_fcal_2022.html')
 
 ##quantum blue url
 
